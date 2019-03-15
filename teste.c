@@ -3,11 +3,13 @@
 #include <string.h>
 #include <math.h>
 
+int huff_tree_size = 0;
+
 typedef struct _node
 {
 	char item;
 	int priority;
-	struct _node *next, *left, *right; 
+	struct _node *next, *left, *right;
 } node;
 
 typedef struct _priority_queue
@@ -33,7 +35,7 @@ void enqueue (priority_queue *pq, char i, int p)
 	new_node->priority = p;
 	if (is_empty(pq) || (p <= pq->head->priority))
 	{
-		
+
 		new_node->next = pq->head;
 		pq->head = new_node;
 	}
@@ -60,7 +62,7 @@ void print_queue (priority_queue *pq)
 }
 
 void print_pre_order(node *pq)
-{	
+{
 	if (pq != NULL) {
 		printf(" %c ", pq->item);
 		print_pre_order(pq->left);
@@ -72,7 +74,7 @@ priority_queue *add_sort (priority_queue *pq)
 {
 	node *current = pq->head->next;
 	node *previous = pq->head;
-	
+
 	while ((current != NULL) && (pq->head->priority > current->priority))
 	{
 		previous = current;
@@ -82,7 +84,7 @@ priority_queue *add_sort (priority_queue *pq)
 		node *aux = pq->head;
 		pq->head = pq->head->next;
 		previous->next = aux;
-		aux->next = current;	
+		aux->next = current;
 	}
 
 	return pq;
@@ -94,11 +96,11 @@ node* create_huffman_tree (priority_queue *pq)
 	{
 		node *new_node = (node*) malloc (sizeof(node));
 		new_node->item = '*';
-		new_node->priority = pq->head->priority + pq->head->next->priority; 
+		new_node->priority = pq->head->priority + pq->head->next->priority;
 		new_node->left = pq->head;
 		new_node->right = pq->head->next;
 
-		if(pq->head->next->next != NULL) 
+		if(pq->head->next->next != NULL)
 		{
 			node *aux = pq->head->next->next;
 			pq->head->next->next = NULL;
@@ -113,20 +115,28 @@ node* create_huffman_tree (priority_queue *pq)
 	}
 }
 
+void tree_size(node *root) {
+    if(root != NULL) {
+        huff_tree_size++;
+        tree_size(root->left);
+        tree_size(root->right);
+    }
+}
+
+void compress(FILE *file, FILE *compress_file, node *root, int file_size) {
+
+}
 
 int main ()
 {
-	int caracter = 0;
-  	int array[256];
-	FILE *arquivo = fopen("japao.jpg", "r");
-	
+	int caracter = 0, size;
+  	int array[256] = {0};
+	FILE *arquivo = fopen("japao.bmp", "r");
+	FILE *compress_file = fopen("compress.txt", "w+");
+
 	if (arquivo == NULL) {
 		printf("File error\n");
 		return 0;
-	}
-
-	for(int j = 0; j < 256; j++) {
-		array[j] = 0;
 	}
 
   	while(caracter != EOF) {
@@ -142,9 +152,17 @@ int main ()
 		if(array[i] > 0) {
 			enqueue(pq, i, array[i]);
 		}
-	} 
-	create_huffman_tree(pq);
-	print_pre_order (pq->head);
+	}
+    create_huffman_tree(pq);
+	//tree_size(pq->head);
+	//printf("%d\n", tree_size);
+	/*create_huffman_tree(pq);
+	fseek(arquivo, 0, SEEK_END);
+	size = ftell(arquivo);
+	rewind(arquivo);
+	for(int i = 0; i < size; i++) {
+
+	}*/
 
 	return 0;
 }
