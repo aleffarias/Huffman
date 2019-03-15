@@ -12,11 +12,6 @@ typedef struct _element element;
 
 typedef struct _hash_table hash_table;
 
-hash_table* create_hash_table ();
-
-void put (hash_table *ht, int key, int *value);
-
-int *get (hash_table *ht, int key);
-
+hash_table *create_hash_table();
 
 #endif /* HASH_H_ */

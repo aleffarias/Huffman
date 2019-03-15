@@ -14,9 +14,12 @@ typedef struct _priority_queue priority_queue;
 
 void print_pre_order(node *pq, FILE *file);
 
-void create_huffman_tree (priority_queue *pq);
+void create_huffman_tree(priority_queue *pq);
 
 void tree_size(node *root);
 
+int max(int a, int b);
+
+int h(node *bt);
 
 #endif /* TREE_H_ */
