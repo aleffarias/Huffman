@@ -26,14 +26,6 @@ priority_queue* create_priority_queue ()
 	 return new_pq;
 }
 
-<<<<<<< HEAD
-=======
-priority_queue *add_sort (priority_queue *pq, node* new_node)
-{
-	
-}
-
->>>>>>> 0b8e5b51234650b26eaba9782f99a455985caf0f
 void enqueue (priority_queue *pq, char i, int p)
 {
 	node *new_node = (node*) malloc (sizeof (node));
@@ -54,7 +46,6 @@ void enqueue (priority_queue *pq, char i, int p)
 		}
 		new_node->next = current->next;
 		current->next = new_node;
-<<<<<<< HEAD
 	}
 }
 
@@ -68,21 +59,6 @@ void print_queue (priority_queue *pq)
 	}
 }
 
-=======
-	}
-}
-
-/*void print_queue (priority_queue *pq)
-{
-	node *aux = pq->head;
-	while (aux != NULL)
-	{
-		printf ("%c ", aux->item);
-		aux = aux->next;
-	}
-}
-
->>>>>>> 0b8e5b51234650b26eaba9782f99a455985caf0f
 void print_pre_order(node *pq)
 {	
 	if (pq != NULL) {
@@ -90,7 +66,6 @@ void print_pre_order(node *pq)
 		print_pre_order(pq->left);
 		print_pre_order(pq->right);
 	}
-<<<<<<< HEAD
 }
 
 priority_queue *add_sort (priority_queue *pq)
@@ -112,9 +87,6 @@ priority_queue *add_sort (priority_queue *pq)
 
 	return pq;
 }
-=======
-}*/
->>>>>>> 0b8e5b51234650b26eaba9782f99a455985caf0f
 
 node* create_huffman_tree (priority_queue *pq)
 {
@@ -144,38 +116,17 @@ node* create_huffman_tree (priority_queue *pq)
 
 int main ()
 {
-	int caracter = 0;
-  	int array[256];
-	FILE *arquivo = fopen("japao.jpg", "r");
-	
-	if (arquivo == NULL) {
-		printf("File error\n");
-		return 0;
-	}
-
-	for(int j = 0; j < 256; j++) {
-		array[j] = 0;
-	}
-
-  	while(caracter != EOF) {
-  		caracter = fgetc(arquivo);
-  		array[caracter]++;
-
-  	}
-
 	int i, priority;
 	char item;
 	priority_queue *pq = create_priority_queue ();
-	for(i = 0; i < 256; i++) {
-		if(array[i] > 0) {
-			enqueue(pq, i, array[i]);
-		}
+	for(i = 0; i < 6; i++) {
+		scanf("%c%d", &item, &priority);
+		getchar();
+		enqueue(pq, item, priority);
+
 	} 
 	create_huffman_tree(pq);
-<<<<<<< HEAD
 	print_pre_order (pq->head);
-=======
->>>>>>> 0b8e5b51234650b26eaba9782f99a455985caf0f
 
 	return 0;
 }
