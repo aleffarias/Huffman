@@ -31,7 +31,6 @@ int main() {
   int caracter = 0, size;
   int array[256] = {0};
   FILE *arquivo = fopen("huffinho.txt", "r");
-  FILE *compress_file = fopen("compressed.txt", "w+");
 
   hash_table *ht = create_hash_table();
 
@@ -39,6 +38,8 @@ int main() {
     printf("File error\n");
     return 0;
   }
+
+  FILE *compress_file = fopen("compressed.huff", "w+");
 
   while (caracter != EOF) {
     caracter = fgetc(arquivo);
