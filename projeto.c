@@ -8,7 +8,7 @@
 // Structs
 
 typedef struct _node {
-  char item;
+  unsigned char item;
   int priority;
   struct _node *next, *left, *right;
 } node;
@@ -108,12 +108,13 @@ node *create_huffman_tree(node *head) {
   return head;
 }
 
-void tree_size(node *root, int huff_tree_size) {
+int tree_size(node *root, int huff_tree_size) {
   if (root != NULL) {
     huff_tree_size++;
-    tree_size(root->left, huff_tree_size);
-    tree_size(root->right, huff_tree_size);
+    huff_tree_size = tree_size(root->left, huff_tree_size);
+    huff_tree_size = tree_size(root->right, huff_tree_size);
   }
+  return huff_tree_size;
 }
 
 /******************************************************************************/
@@ -167,34 +168,60 @@ unsigned char set_bit(unsigned char c, int i) {
   return mask | c;
 }
 
-void compress(hash_table *ht, FILE *file, FILE *compressed) {
+int is_bit_i_set(unsigned char c, int i) {
+  unsigned char mask = 1 << i;
+  return mask & c;
+}
+
+int put_byte (hash_table *ht, FILE *file, FILE *compressed) {
   int byte = fgetc(file);
   unsigned char c = 0;
-  int i = 7, j = 0;
+  int pos_byte = 7, pos_way = 0;
 
   while (byte != EOF) {
-    if (j < ht->table[byte]->size) {
-      if (ht->table[byte]->way[j] == '1') {
-        c = set_bit(c, i);
+    if (pos_way < ht->table[byte]->size) {
+      if (ht->table[byte]->way[pos_way] == '1') {
+        c = set_bit(c, pos_byte);
       }
-      j++;
-      i--;
+      pos_way++;
+      pos_byte--;
     } else {
-      j = 0;
+      pos_way = 0;
       byte = fgetc(file);
     }
-    if (i < 0) {
-      putchar(c);
-      i = 7;
+    if (pos_byte < 0) {
+      pos_byte = 7;
       fputc(c, compressed);
       c = 0;
     }
   }
+  return pos_byte + 1;
+}
+
+void print_trash (unsigned char trash_bin, FILE *compressed) {
+  unsigned char c = 0;
+  for (int i = 2, j = 7; i >= 0; i--, j--) {
+    if (is_bit_i_set (trash_bin, i)) {
+      set_bit (c, j);
+    }
+  }
+  fputc (c, compressed);
+}
+
+void compress(hash_table *ht, node *head, FILE *file, FILE *compressed) {
+  fputc (0, compressed);
+  fputc (0, compressed);
+  print_pre_order(head, compressed);
+  int trash = put_byte (ht, file, compressed);
+  int huff_tree_size = tree_size (head, 0);
+  rewind (compressed);
+  print_trash (trash, compressed);
 }
 
 int main() {
   int byte = 0, size, i;
   int frequency[SIZE_ARRAY];
+
   FILE *file = fopen("huffman.txt", "r");
 
   if (file == NULL) {
@@ -206,7 +233,8 @@ int main() {
     frequency[j] = 0;
   }
 
-  FILE *compressed = fopen("compress_file.txt", "w+");
+  FILE *compressed = fopen("compress_file.huff", "w+");
+
 
   while (byte != EOF) {
     byte = fgetc(file);
@@ -223,22 +251,17 @@ int main() {
   }
 
   pq->head = create_huffman_tree(pq->head);
-  // print_pre_order(pq->head, compressed);
 
-  // aqui vamos chamar a funcao de salvar o caminho da arvore
   unsigned char way_tree[SIZE_ARRAY];
+
   save_way(ht, pq->head, way_tree, 0);
+
   rewind(file);
 
-  // for (i = 0; i < SIZE_HASH; i++) {
-  //   if (ht->table[i] != NULL) {
-  //     print_way(ht->table[i]);
-  //   }
-  // }
-
-  compress(ht, file, compressed);
+  compress(ht, pq->head, file, compressed);
 
   fclose(file);
+
   fclose(compressed);
 
   return 0;
