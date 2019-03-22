@@ -163,14 +163,9 @@ void print_way(element *element) {
 }
 /******************************************************************************/
 
-unsigned char set_bit(unsigned char c, int i) {
+unsigned char set_bit (unsigned char c, int i) {
   unsigned char mask = 1 << i;
   return mask | c;
-}
-
-int is_bit_i_set(unsigned char c, int i) {
-  unsigned char mask = 1 << i;
-  return mask & c;
 }
 
 int put_byte (hash_table *ht, FILE *file, FILE *compressed) {
@@ -198,24 +193,54 @@ int put_byte (hash_table *ht, FILE *file, FILE *compressed) {
   return pos_byte + 1;
 }
 
-void print_trash (unsigned char trash_bin, FILE *compressed) {
+void put_header (int *header, FILE *compressed) {
   unsigned char c = 0;
-  for (int i = 2, j = 7; i >= 0; i--, j--) {
-    if (is_bit_i_set (trash_bin, i)) {
-      set_bit (c, j);
+  int pos_byte = 7, indice = 0;
+
+  for (indice = 0; indice < 16; indice++) {
+    if (header[indice]) {
+      c = set_bit (c, pos_byte);
+    }
+
+    pos_byte--;
+
+    if (pos_byte < 0)
+    {
+      pos_byte = 7;
+      fputc (c, compressed);
+      c = 0;
     }
   }
-  fputc (c, compressed);
+}
+
+int* create_header (int trash, int huff_tree_size) {
+  int *header = (int*) malloc (16 * sizeof (int));
+
+  for (int i = 2; i >= 0; i--) {
+    header[i] = trash % 2;
+    trash /= 2;
+  }
+
+  for (int i = 15; i >= 3; i--) {
+    header[i] = huff_tree_size % 2;
+    huff_tree_size /= 2;
+  }
+  return header;
 }
 
 void compress(hash_table *ht, node *head, FILE *file, FILE *compressed) {
   fputc (0, compressed);
   fputc (0, compressed);
   print_pre_order(head, compressed);
+
   int trash = put_byte (ht, file, compressed);
   int huff_tree_size = tree_size (head, 0);
+
+  int *header = create_header (trash, huff_tree_size);
+
   rewind (compressed);
-  print_trash (trash, compressed);
+  
+  put_header (header, compressed);
 }
 
 int main() {
@@ -234,7 +259,6 @@ int main() {
   }
 
   FILE *compressed = fopen("compress_file.huff", "w+");
-
 
   while (byte != EOF) {
     byte = fgetc(file);
