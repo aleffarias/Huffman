@@ -4,29 +4,24 @@
 
 all: treeh test
 	
-treeh: Huffman.o compress.o extract.o tree.o queue.o hash.o 
-	gcc Huffman.o compress.o extract.o tree.o queue.o hash.o -lm -o treeh
+treeh: main.o compress.o extract.o structs.o 
+	gcc main.o compress.o extract.o structs.o -lm -o treeh
 
 compress.o: compress.c compress.h 
 	gcc -c compress.c
 
-main.o: Huffman.c compress.h extract.h tree.h queue.h hash.h
-	gcc -c Huffman.c
+main.o: main.c compress.h extract.h structs.h tad.h
+	gcc -c main.c
 	
-extract.o: extract.c extract.h compress.h
+extract.o: extract.c extract.h
 	gcc -c extract.c
 	
-tree.o: tree.c tree.h
-	gcc -c tree.c
-	
-queue.o: queue.c queue.h
-	gcc -c queue.c
-	
-hash.o: hash.c hash.h
-	gcc -c hash.c
+
+structs.o: structs.c structs.h
+	gcc -c structs.c
 
 test: treeh
 	./treeh
 
 clean:
-	rm -f *.o compress Huffman extract tree queue hash output.txt treeh
+	rm -f *.o compress main extract structs output.txt treeh
