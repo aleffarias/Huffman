@@ -40,6 +40,7 @@ int put_byte (hash_table *ht, FILE *file, FILE *compressed) {
       c = 0;
     }
   }
+  fputc(c, compressed);
   return pos_byte + 1;
 }
 
