@@ -96,7 +96,6 @@ void print_file(binary_tree *bt, FILE *compressed, FILE *extracted) {
       x = fgetc(compressed);
       c = x;
       if(x == EOF) {
-        printf("%d\n", x);
         break;
       }
     }
@@ -107,11 +106,9 @@ void print_file(binary_tree *bt, FILE *compressed, FILE *extracted) {
       if(!is_bit_i_set(c, pos_byte)) {
         aux_bt = aux_bt->left;
         pos_byte--;
-        printf("passou 0\n");
       } else {
         aux_bt = aux_bt->right;
         pos_byte--;
-        printf("passou 1\n");
       }
     }
   }
