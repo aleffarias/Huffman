@@ -90,20 +90,20 @@ void print_file(binary_tree *bt, FILE *compressed, FILE *extracted) {
   unsigned char c;
   int x;
   binary_tree *aux_bt = bt;
-  while(1) {
-    if(pos_byte < 0) {
+  while (1) {
+    if (pos_byte < 0) {
       pos_byte = 7;
       x = fgetc(compressed);
       c = x;
-      if(x == EOF) {
+      if (x == EOF) {
         break;
       }
     }
-    if(aux_bt->left == NULL && aux_bt->right == NULL) {
+    if (aux_bt->left == NULL && aux_bt->right == NULL) {
       fputc(aux_bt->item, extracted);
       aux_bt = bt;
     } else {
-      if(!is_bit_i_set(c, pos_byte)) {
+      if (!is_bit_i_set(c, pos_byte)) {
         aux_bt = aux_bt->left;
         pos_byte--;
       } else {
@@ -119,7 +119,7 @@ void extract(binary_tree *bt, FILE *compressed, FILE *extracted) {
 
   bt = create_tree(bt, compressed, '0');
 
-  //print_pre_order(bt);
+  // print_pre_order(bt);
 
   print_file(bt, compressed, extracted);
 }
@@ -133,9 +133,9 @@ int main() {
     puts("File error");
     return 0;
   }
-  
+
   extract(bt, compressed, extracted);
-  
+
   fclose(compressed);
   fclose(extracted);
   // print_pre_order(bt);
