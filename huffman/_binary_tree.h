@@ -15,7 +15,8 @@ binary_tree *create_empty_binary_tree();
 binary_tree *create_binary_tree(unsigned char item, binary_tree *left,
                                 binary_tree *right);
 
-binary_tree *create_tree(binary_tree *bt, FILE *compressed, unsigned char byte);
+binary_tree *create_tree(binary_tree *bt, FILE *compressed, unsigned char byte,
+                         int tree_size);
 
 void print_pre_order(binary_tree *bt);
 

@@ -9,9 +9,30 @@
 #include <string.h>
 
 #include "_hash_table.h"
+#include "_node.h"
 #include "_priority_queue.h"
 
-#define SIZE_ARRAY 256
+#define ARRAY_SIZE 256
+#define HASH_SIZE 256
+
+typedef struct _node {
+  unsigned char item;
+  int priority;
+  struct _node *next, *left, *right;
+} node;
+
+typedef struct _priority_queue {
+  node *head;
+} priority_queue;
+
+typedef struct _element {
+  int size;
+  unsigned char way[HASH_SIZE];
+} element;
+
+typedef struct _hash_table {
+  element *table[HASH_SIZE];
+} hash_table;
 
 void write_pre_order(node *tree, FILE *file) {
   if (tree != NULL) {
@@ -106,13 +127,13 @@ void put_header(int *header, FILE *compressed) {
 
 int *create_header(int trash, int huff_tree) {
   int *header = (int *)malloc(16 * sizeof(int));
-
-  for (int i = 2; i >= 0; i--) {
+  int i;
+  for (i = 2; i >= 0; i--) {
     header[i] = trash % 2;
     trash /= 2;
   }
 
-  for (int i = 15; i >= 3; i--) {
+  for (i = 15; i >= 3; i--) {
     header[i] = huff_tree % 2;
     huff_tree /= 2;
   }
@@ -121,7 +142,7 @@ int *create_header(int trash, int huff_tree) {
 }
 
 void compress() {
-  int byte = 0;
+  int byte = 0, i;
   int frequency[ARRAY_SIZE] = {0};
   unsigned char way_tree[ARRAY_SIZE];
 
@@ -141,7 +162,7 @@ void compress() {
   priority_queue *pq = create_priority_queue();
   hash_table *ht = create_hash_table();
 
-  for (int i = 0; i < ARRAY_SIZE; i++) {
+  for (i = 0; i < ARRAY_SIZE; i++) {
     if (frequency[i] > 0) {
       enqueue(pq, i, frequency[i]);
     }
@@ -158,8 +179,10 @@ void compress() {
 
   write_pre_order(pq->head, compressed);
 
-  int trash = put_byte(ht, file, compressed);
-  int huff_tree = tree_size(pq->head, 0);
+  int trash, huff_tree;
+
+  trash = put_byte(ht, file, compressed);
+  huff_tree = tree_size(pq->head, 0);
 
   int *header = create_header(trash, huff_tree);
 

@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SIZE_HASH 256
+#define HASH_SIZE 256
 
 typedef struct _element {
   int size;

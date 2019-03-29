@@ -8,6 +8,11 @@
 #ifndef COMPRESS_H_
 #define COMPRESS_H_
 
+typedef struct _node node;
+typedef struct _priority_queue priority_queue;
+typedef struct _element element;
+typedef struct _hash_table hash_table;
+
 void write_pre_order(node *tree, FILE *file);
 
 int tree_size(node *tree, int size);

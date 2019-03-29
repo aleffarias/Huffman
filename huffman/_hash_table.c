@@ -11,16 +11,19 @@
 
 #include "_element.h"
 
-#define SIZE_HASH 256
+typedef struct _element {
+  int size;
+  unsigned char way[256];
+} element;
 
 typedef struct _hash_table {
-  element *table[HASH_SIZE];
+  element *table[256];
 } hash_table;
 
 hash_table *create_hash_table() {
   hash_table *new_ht = (hash_table *)malloc(sizeof(hash_table));
 
-  for (int i = 0; i < HASH_SIZE; i++) {
+  for (int i = 0; i < 256; i++) {
     new_ht->table[i] = NULL;
   }
   return new_ht;

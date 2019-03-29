@@ -11,6 +11,12 @@
 
 #include "_node.h"
 
+typedef struct _node {
+  unsigned char item;
+  int priority;
+  struct _node *next, *left, *right;
+} node;
+
 typedef struct _priority_queue {
   node *head;
 } priority_queue;

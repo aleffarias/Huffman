@@ -26,20 +26,20 @@ binary_tree *create_binary_tree(unsigned char item, binary_tree *left,
   return new_bt;
 }
 
-binary_tree *create_tree(binary_tree *bt, FILE *compressed,
-                         unsigned char byte) {
-  if (TREE_SIZE_EXTRACTED != 0) {
+binary_tree *create_tree(binary_tree *bt, FILE *compressed, unsigned char byte,
+                         int tree_size) {
+  if (tree_size != 0) {
     byte = fgetc(compressed);
-    TREE_SIZE_EXTRACTED--;
+    tree_size--;
 
     if (byte == '*') {
       bt = create_binary_tree(byte, NULL, NULL);
-      bt->left = create_tree(bt->left, compressed, byte);
-      bt->right = create_tree(bt->right, compressed, byte);
+      bt->left = create_tree(bt->left, compressed, byte, tree_size);
+      bt->right = create_tree(bt->right, compressed, byte, tree_size);
     } else {
       if (byte == '\\') {
         byte = fgetc(compressed);
-        TREE_SIZE_EXTRACTED--;
+        tree_size--;
       }
       bt = create_binary_tree(byte, NULL, NULL);
     }

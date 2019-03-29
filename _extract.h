@@ -8,8 +8,6 @@
 #ifndef EXTRACT_H_
 #define EXTRACT_H_
 
-typedef struct _binary_tree binary_tree;
-
 int power(int a, int b);
 
 int is_bit_i_set(unsigned char c, int i);

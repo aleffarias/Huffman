@@ -8,28 +8,28 @@ huffman: main.o _compress.o _extract.o _hash_table.o _element.o _priority_queue.
 	gcc main.o _compress.o _extract.o _hash_table.o _element.o _priority_queue.o _node.o _binary_tree.o  -lm -o huffman
 
 main.o : main.c _compress.h _extract.h
-	gcc -c main.o main.c
+	gcc -o main.o main.c -c -W -Wall -ansi -pedantic
 
-_compress.o :_compress.c _compress.h _hash_table.h _element.h _priority_queue.h _node.h
-	gcc -c _compress.c 
+_compress.o :_compress.c _compress.h _hash_table.h _priority_queue.h
+	gcc -o _compress.o _compress.c -c -W -Wall -ansi -pedantic
 
 _hash_table.o : _hash_table.c _hash_table.h _element.h
-	gcc -c _hash_table.c
+	gcc -o _hash_table.o _hash_table.c -c -W -Wall -ansi -pedantic
 
 _element.o : _element.c _element.h
-	gcc -c _element.c
+	gcc -o _element.o _element.c -c -W -Wall -ansi -pedantic
 
 _priority_queue.o : _priority_queue.c _priority_queue.h  _node.h
-	gcc -c _priority_queue.c
+	gcc -o _priority_queue.o _priority_queue.c
 
 _node.o : _node.c _node.h
-	gcc -c _node.c
+	gcc -o _node.o _node.c -c -W -Wall -ansi -pedantic
 
 _extract.o :  _extract.c _extract.h _binary_tree.h
-	gcc -c _extract.c -c
+	gcc -o _extract.o _extract.c -c -W -Wall -ansi -pedantic
 
 _binary_tree.o : _binary_tree.c _binary_tree.h
-	gcc -c  _binary_tree.c
+	gcc -o _binary_tree.o _binary_tree.c
 
 test: huffman
 	./huffman

@@ -8,6 +8,7 @@
 #ifndef HASH_TABLE_H_
 #define HASH_TABLE_H_
 
+typedef struct _element element;
 typedef struct _hash_table hash_table;
 
 hash_table *create_hash_table();

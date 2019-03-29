@@ -8,6 +8,7 @@
 #ifndef PRIORITY_QUEUE_H_
 #define PRIORITY_QUEUE_H_
 
+typedef struct _node node;
 typedef struct _priority_queue priority_queue;
 
 priority_queue *create_priority_queue();

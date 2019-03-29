@@ -11,12 +11,6 @@
 #include "_binary_tree.h"
 
 int TRASH_SIZE_EXTRACTED = 0;
-// int TREE_SIZE_EXTRACTED = 0;
-
-typedef struct _binary_tree {
-  unsigned char item;
-  struct _binary_tree *left, *right;
-} binary_tree;
 
 int power(int a, int b) {
   int base = a;
@@ -34,9 +28,8 @@ int is_bit_i_set(unsigned char c, int i) {
   return mask & c;
 }
 
-int calc_tree_size(binary_tree *bt, FILE *compressed) {
+void calc_tree_size(binary_tree *bt, FILE *compressed) {
   unsigned char byte = fgetc(compressed);
-  int tree_size;
 
   for (int i = 15; i >= 13; i--) {
     if (is_bit_i_set(byte, i % 8)) {
@@ -46,13 +39,12 @@ int calc_tree_size(binary_tree *bt, FILE *compressed) {
 
   for (int i = 12; i >= 0; i--) {
     if (is_bit_i_set(byte, i % 8)) {
-      tree_size += power(2, i);
+      TREE_SIZE_EXTRACTED += power(2, i);
     }
     if (i == 8) {
       byte = fgetc(compressed);
     }
   }
-  return tree_size;
 }
 
 void write_file(binary_tree *bt, FILE *compressed, FILE *extracted,
@@ -98,9 +90,9 @@ void decompress() {
 
   FILE *extracted = fopen("jubileu.pdf", "w+");
 
-  int tree_size = calc_tree_size(bt, compressed);
+  calc_tree_size(bt, compressed);
 
-  bt = create_tree(bt, compressed, '0', tree_size);
+  bt = create_tree(bt, compressed, '0');
 
   write_file(bt, compressed, extracted, file_size);
 
