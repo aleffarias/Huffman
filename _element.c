@@ -11,15 +11,7 @@
 
 #define SIZE_HASH 256
 
-
 typedef struct _element {
   int size;
-  unsigned char way[SIZE_HASH];
+  unsigned char way[HASH_SIZE];
 } element;
-
-void print_way(element *element) {
-  for (int i = 0; i < element->size; i++) {
-    printf("%c", element->way[i]);
-  }
-  puts("\n");
-}

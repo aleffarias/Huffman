@@ -5,7 +5,6 @@
  *      Author: alef
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,9 +14,6 @@
 typedef struct _priority_queue {
   node *head;
 } priority_queue;
-
-/******************************************************************************/
-// Queue
 
 priority_queue *create_priority_queue() {
   priority_queue *new_pq = (priority_queue *)malloc(sizeof(priority_queue));
@@ -46,4 +42,3 @@ void enqueue(priority_queue *pq, char i, int p) {
     current->next = new_node;
   }
 }
-

@@ -8,14 +8,20 @@
 #ifndef COMPRESS_H_
 #define COMPRESS_H_
 
-unsigned char set_bit (unsigned char c, int i);
+void write_pre_order(node *tree, FILE *file);
 
-int put_byte (hash_table *ht, FILE *file, FILE *compressed);
+int tree_size(node *tree, int size);
 
-void put_header (int *header, FILE *compressed);
+void save_way(hash_table *ht, node *tree, unsigned char *way, int pos);
 
-int* create_header (int trash, int huff_tree_size);
+unsigned char set_bit(unsigned char c, int i);
 
-void compress(hash_table *ht, node *head, FILE *file, FILE *compressed);
+int put_byte(hash_table *ht, FILE *file, FILE *compressed);
+
+void put_header(int *header, FILE *compressed);
+
+int *create_header(int trash, int huff_tree);
+
+void compress();
 
 #endif /* COMPRESS_H_ */

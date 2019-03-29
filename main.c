@@ -10,36 +10,34 @@
 #include <string.h>
 
 #include "_compress.h"
-
-
+#include "_extract.h"
 
 int main() {
-	int key;
-	while(1) {
-		printf("Para comprimir, digite 1, para extrair, digite 2, para encerrar o programa, digite -1");
-		scanf("%d", &key);
-		if(key == 1) {
-			priority_queue *pq = create_priority_queue();
-			hash_table *ht = create_hash_table();
+  int option;
 
-			FILE *file = fopen("huffman.txt", "r");
-			FILE *compressed = fopen("compress_file.huff", "w+");
+  puts("HUFFMAN");
+  getchar();
 
-			if (file == NULL || compressed == NULL) {
-			  puts("File error");
-			  return 0;
-			}
+  while (1) {
+    puts("Digite:\n0 para compressao\n1 para descompressao\n2 para sair\n");
 
-			compress(ht, pq, file, compressed);
+    scanf("%d", &option);
 
-			fclose(file);
+    while (option != 0 && option != 1 && option != 2) {
+      puts("Digite corretamente!");
+      scanf("%d", &option);
+    }
 
-			fclose(compressed);
-		} else if(key == 2) {
+    if (option == 2) {
+      break;
+    }
 
-		} else {
-			return 0;
-		}
-	}
+    puts("Nao vai durar nem uma hora!\n.\n.\n.");
+
+    (option) ? decompress() : compress();
+
+    getchar();
+  }
+
   return 0;
 }

@@ -14,6 +14,4 @@ hash_table *create_hash_table();
 
 void put(hash_table *ht, int key, int size, unsigned char *way);
 
-void save_way(hash_table *ht, node *tree, unsigned char *way, int pos);
-
 #endif /* HASH_TABLE_H_ */

@@ -10,6 +10,4 @@
 
 typedef struct _element element;
 
-void print_way(element *element);
-
 #endif /* ELEMENT_H_ */

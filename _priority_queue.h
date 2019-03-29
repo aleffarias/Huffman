@@ -10,15 +10,10 @@
 
 typedef struct _priority_queue priority_queue;
 
-/******************************************************************************/
-// Queue
-
 priority_queue *create_priority_queue();
 
 int is_empty_pq(priority_queue *pq);
 
 void enqueue(priority_queue *pq, char i, int p);
-
-
 
 #endif /* PRIORITY_QUEUE_H_ */
