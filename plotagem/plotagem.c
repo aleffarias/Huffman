@@ -2,12 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-int cont_list = 0, cont_tree = 0;
-
 typedef struct node node;
 typedef struct binary_tree binary_tree;
 
-// List
+// Lista
 struct node {
   int item;
   node *next;
@@ -26,23 +24,21 @@ node *add_list(node *head, int item) {
 }
 
 node *search_list(node *head, int item) {
-  node *aux = head;
   while (head != NULL) {
     if (head->item == item) {
       return head;
     }
     head = head->next;
-    cont_list++;
   }
 
-  return aux;
+  return NULL;
 }
 
 int is_empty(node *head) { return (head == NULL); }
 
 void print_linked_list(node *head) {
   while (head != NULL) {
-    printf("%d ", head->item);
+    printf("%d\n", head->item);
     head = head->next;
   }
 }
@@ -54,7 +50,7 @@ void print_linked_list_recursively(node *head) {
   }
 }
 
-// Tree
+// Árvore
 
 struct binary_tree {
   int item;
@@ -97,57 +93,52 @@ binary_tree* search_tree(binary_tree *bt, int item)
   if ((bt == NULL) || (bt->item == item)) {
     return bt;
   } else if (bt->item > item) {
-    cont_tree++;
     return search_tree(bt->left, item);
   } else {
-    cont_tree++;
     return search_tree(bt->right, item);
   }
 }
 
 int main () {
-  int i, jp, max, add_l, add_t;
+  int i, max, jp, add_l, add_t;
   
   node *list = create_linked_list();
   binary_tree *bt = create_empty_binary_tree();
 
-  FILE *tree_file = fopen("tree.txt", "w+");
-  FILE *list_file = fopen("list.txt", "w+");
+  FILE *output = fopen("tree.txt", "w+");
 
-  printf("Digite a quantidade de números:\n");
-  scanf("%d", &max);
+    printf("Digite a quantidade de números:\n");
+    scanf("%d", &max);
 
-  printf("intervalo da rand: [0,%d]\n", max);
+    printf("intervalo da rand: [0,%d]\n", max);
 
-  srand(time(NULL));
+    srand(time(NULL));
 
-  // ADD
-  for(i = 1; i <= max; i++) { 
-    jp = rand() % 1000000;
-    printf("%d ", jp);
-    
-    
-    list = add_list(list, jp);
-    bt = add_tree(bt, jp);
-  }
-  printf("\n");
+    // ADD
+    for(i=1 ; i <= max ; i++) { 
+        jp = rand() % max;
+        
+        add_list(list, jp);
+        fprintf(output, "%d %d\n",i, jp);
 
-  // Search
-  for(i = 1; i <= max; i++) { 
-    jp = rand() % 1000000;
-    
-    list = search_list(list, jp);
-    fprintf(list_file, "%d %d\n",jp, cont_list);
-    cont_list = 0;
+        add_tree(bt, jp);
 
-    search_tree(bt, jp);
-    fprintf(tree_file, "%d %d\n",jp, cont_tree);
-    cont_tree = 0;
+        printf("Numero %d: %d\n",i, jp);
 
-  }
-  print_linked_list(list);
-  printf("\n");
-  fclose(tree_file);
-  fclose(list_file);
+      }
+
+    // Search
+      for(i=1 ; i <= max ; i++) { 
+        jp = rand() % max;
+        
+        search_list(list, jp);
+        fprintf(output, "%d %d\n",i, jp);
+
+        search_tree(bt, jp);
+
+        printf("Numero %d: %d\n",i, jp);
+
+      }
+
   return 0;
 }
