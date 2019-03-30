@@ -23,8 +23,6 @@ int main () {
     if (option == 2) {
       break;
     }
-
-    puts ("Nao vai durar nem uma hora!\n.\n.\n.");
     
     (option)? decompress() : compress ();
     
