@@ -52,14 +52,14 @@ Mkfile.old
 dkms.conf
 
 # Eclipse
-.project
+*.project
 
 #Apresentacao
-.pptx
-.pdf
-.docx
-.doc
-.png
-.jpg
-.mp4
-.mp3
+*.pptx
+*.pdf
+*.docx
+*.doc
+*.png
+*.jpg
+*.mp4
+*.mp3
