@@ -91,7 +91,11 @@ void calc_tree_size(binary_tree *bt, FILE *compressed) {
 
 void decompress () {
   binary_tree *bt = create_empty_binary_tree();
-  FILE *compressed = fopen("compressed_file.huff", "r");
+  char my_file_comp[50], my_file_ext[50];
+
+  puts ("Qual arquivo deseja extrair?\nInsira: arquivo.extensao");
+  scanf ("%s", my_file_comp);
+  FILE *compressed = fopen(my_file_comp, "r");
 
   if (compressed == NULL) {
     puts("File error\n");
@@ -102,7 +106,10 @@ void decompress () {
   unsigned long long int file_size = ftell (compressed);
   rewind (compressed);
 
-  FILE *extracted = fopen("jubileu.txt", "w+");
+  puts ("\nNomeie o arquivo de saída\nInsira: arquivo.extensao");
+  scanf ("%s", my_file_ext);
+  FILE *extracted = fopen(my_file_ext, "w+");
+  puts ("\nNao vai durar nem uma hora!\n.\n.\n.");
 
   calc_tree_size(bt, compressed);
 
@@ -114,5 +121,5 @@ void decompress () {
   fclose(extracted);
   
   //print_pre_order(bt);
-  puts ("\n");
+  puts ("Concluido!\n");
 }
