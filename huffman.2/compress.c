@@ -37,12 +37,10 @@ int* create_header (int trash, int huff_tree) {
     header[i] = trash % 2;
     trash /= 2;
   }
-
   for (int i = 15; i >= 3; i--) {
     header[i] = huff_tree % 2;
     huff_tree /= 2;
   }
-
   return header;
 }
 
@@ -100,12 +98,10 @@ void save_way(hash_table *ht, node *tree, unsigned char *way, int pos) {
     way[pos] = '0';
     save_way(ht, tree->left, way, pos + 1);
   }
-
   if (tree->right != NULL) {
     way[pos] = '1';
     save_way(ht, tree->right, way, pos + 1);
   }
-
   if ((tree->left == NULL) && (tree->right == NULL)) {
     put(ht, tree->item, pos, way);
   }
@@ -119,14 +115,12 @@ node *sort(node *head) {
     previous = current;
     current = current->next;
   }
-
   if (head != previous) {
     node *aux = head;
     head = head->next;
     previous->next = aux;
     aux->next = current;
   }
-
   return head;
 }
   
@@ -156,13 +150,18 @@ void compress () {
   int byte = 0;
   int frequency[ARRAY_SIZE] = {0};
   unsigned char way_tree[ARRAY_SIZE];
+  char my_file[50];
 
-  FILE *file = fopen("huffman.txt", "r");
+  puts ("Qual arquivo deseja comprimir?\nInsira: arquivo.extensao");
+  scanf ("%s", my_file);
+  FILE *file = fopen(my_file, "r");
 
   if (file == NULL) {
-    puts("File error\n");
+    puts("\nFile error\n");
     return;
   }
+
+  puts ("\nNao vai durar nem uma hora!\n.\n.\n.");
 
   while (byte != EOF) {
     byte = fgetc(file);
@@ -192,7 +191,6 @@ void compress () {
 
   int trash = put_byte (ht, file, compressed);
   int huff_tree = tree_size (pq->head, 0);
-
   int *header = create_header (trash, huff_tree);
 
   rewind (compressed);
@@ -202,5 +200,5 @@ void compress () {
   fclose (file);
   fclose (compressed);
 
-  puts ("Operacao realizada com sucesso!\n");
+  puts ("Concluido!\n");
 }
