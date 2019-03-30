@@ -25,8 +25,6 @@ int main () {
     }
     
     (option)? decompress() : compress ();
-    
-    getchar ();
   }
 
   return 0;
