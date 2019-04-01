@@ -3,6 +3,7 @@
 
 #include "binary_tree.h"
 
+#define ULLI unsigned long long int
 
 int TRASH_SIZE = 0;
 int TREE_SIZE = 0;
@@ -13,7 +14,7 @@ int is_bit_i_set(unsigned char c, int i) {
   return mask & c;
 }
 
-void write_file(binary_tree *bt, FILE *compressed, FILE *extracted, unsigned long long int file_size) {
+void write_file(binary_tree *bt, FILE *compressed, FILE *extracted, ULLI file_size) {
   int byte, pos_byte = -1;
   unsigned char c;
   binary_tree *aux_bt = bt;
@@ -103,7 +104,7 @@ void decompress () {
   }
 
   fseek (compressed, 0, SEEK_END);
-  unsigned long long int file_size = ftell (compressed);
+  ULLI file_size = ftell (compressed);
   rewind (compressed);
 
   puts ("\nNomeie o arquivo de saída\nInsira: arquivo.extensao");
