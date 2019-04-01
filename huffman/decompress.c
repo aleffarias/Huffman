@@ -28,7 +28,7 @@ void write_file(binary_tree *bt, FILE *compressed, FILE *extracted, unsigned lon
     if (aux_bt->left == NULL && aux_bt->right == NULL) {
       fputc(aux_bt->item, extracted);
       aux_bt = bt;
-      if ((ftell (compressed) == file_size) && (pos_byte == TREE_SIZE-1)) {
+      if ((ftell (compressed) == file_size) && ((pos_byte == TRASH_SIZE-1) || pos_byte == 7)) {
         return;
       }
     } else {
@@ -39,9 +39,9 @@ void write_file(binary_tree *bt, FILE *compressed, FILE *extracted, unsigned lon
 }
 
 binary_tree *create_tree(binary_tree *bt, FILE *compressed, unsigned char byte) {
-  if (TRASH_SIZE != 0) {
+  if (TREE_SIZE != 0) {
     byte = fgetc(compressed);
-    TRASH_SIZE--;
+    TREE_SIZE--;
 
     if (byte == '*') {
       bt = create_binary_tree(byte, NULL, NULL);
@@ -50,7 +50,7 @@ binary_tree *create_tree(binary_tree *bt, FILE *compressed, unsigned char byte) 
     } else {
       if (byte == '\\') {
         byte = fgetc(compressed);
-        TRASH_SIZE--;
+        TREE_SIZE--;
       }
       bt = create_binary_tree(byte, NULL, NULL);
     }
@@ -75,13 +75,13 @@ void calc_tree_size(binary_tree *bt, FILE *compressed) {
 
   for (int i = 15; i >= 13; i--) {
     if (is_bit_i_set(byte, i % 8)) {
-      TREE_SIZE += power(2, i%13);
+      TRASH_SIZE += power(2, i%13);
     }
   }
 
   for (int i = 12; i >= 0; i--) {
     if (is_bit_i_set(byte, i % 8)) {
-      TRASH_SIZE += power(2, i);
+      TREE_SIZE += power(2, i);
     }
     if (i == 8) {
       byte = fgetc(compressed);
@@ -93,7 +93,7 @@ void decompress () {
   binary_tree *bt = create_empty_binary_tree();
   char my_file_comp[50], my_file_ext[50];
 
-  puts ("Qual arquivo deseja extrair?\nInsira: arquivo.extensao");
+  puts ("Qual arquivo deseja extrair?\nInsira: arquivo.huff");
   scanf ("%s", my_file_comp);
   FILE *compressed = fopen(my_file_comp, "r");
 
