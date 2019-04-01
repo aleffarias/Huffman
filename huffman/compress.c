@@ -150,7 +150,7 @@ void compress() {
   int byte = 0;
   int frequency[ARRAY_SIZE] = {0};
   unsigned char way_tree[ARRAY_SIZE];
-  char my_file[50];
+  char my_file[50], my_file_comp[50];
 
   puts("Qual arquivo deseja comprimir?\nInsira: arquivo.extensao");
   scanf("%s", my_file);
@@ -161,16 +161,19 @@ void compress() {
     return;
   }
 
-  puts("\nNao vai durar nem uma hora!\n.\n.\n.");
-
   while (byte != EOF) {
     byte = fgetc(file);
     frequency[byte]++;
   }
 
-  FILE *compressed = fopen("compressed.huff", "w+");
+  puts ("\nNomeie o arquivo de saída\nInsira: arquivo.huff");
+  scanf ("%s", my_file_comp);
+  FILE *compressed = fopen(my_file_comp, "w+");
+
   priority_queue *pq = create_priority_queue();
   hash_table *ht = create_hash_table();
+
+  puts("\nNao vai durar nem uma hora!\n.\n.\n.");
 
   for (int i = 0; i < ARRAY_SIZE; i++) {
     if (frequency[i] > 0) {
