@@ -6,13 +6,12 @@
 #include "binary_search_tree.h"
 
 int main () {
-  int i, lim, chosen, cost;
+  int i, lim, chosen, cost_list, cost_tree;
   
   node *list = create_linked_list();
   binary_tree *bt = create_empty_binary_tree();
 
-  FILE *output_list = fopen("list.txt", "w+");
-  FILE *output_tree = fopen("tree.txt", "w+");
+  FILE *output = fopen("plot.txt", "w+");
 
   puts("LISTA ENCADEADA vs ARVORE DE BUSCA BINARIA");
   puts("Digite a quantidade de numeros");
@@ -39,15 +38,15 @@ int main () {
     bt = add_tree(bt, chosen);
   }
 
+  fprintf(output, "numero\tcusto_lista\tcusto_árvore\n");
+
   for(i = 0; i < lim; i++) { 
-    cost = search_list(list, i);
-    fprintf(output_list ,"%d\t%d\n", i, cost);
-    cost = search_tree(bt, i);
-    fprintf(output_tree, "%d\t%d\n", i, cost);
+    cost_list = search_list(list, i);
+    cost_tree = search_tree(bt, i);
+    fprintf(output, "%d\t%d\t%d\n", i, cost_list, cost_tree);
   }
 
-  fclose(output_list);
-  fclose(output_tree);
+  fclose(output);
 
   return 0;
 }
