@@ -4,34 +4,32 @@
 #include "hash_table.h"
 #include "priority_queue.h"
 
-
-unsigned char set_bit (unsigned char c, int i) {
+unsigned char set_bit(unsigned char c, int i) {
   unsigned char mask = 1 << i;
   return mask | c;
 }
 
-void put_header (int *header, FILE *compressed) {
+void put_header(int *header, FILE *compressed) {
   unsigned char c = 0;
   int pos_byte = 7, indice = 0;
 
   for (indice = 0; indice < 16; indice++) {
     if (header[indice]) {
-      c = set_bit (c, pos_byte);
+      c = set_bit(c, pos_byte);
     }
 
     pos_byte--;
 
-    if (pos_byte < 0)
-    {
+    if (pos_byte < 0) {
       pos_byte = 7;
-      fputc (c, compressed);
+      fputc(c, compressed);
       c = 0;
     }
   }
 }
 
-int* create_header (int trash, int huff_tree) {
-  int *header = (int*) malloc (16 * sizeof (int));
+int *create_header(int trash, int huff_tree) {
+  int *header = (int *)malloc(16 * sizeof(int));
 
   for (int i = 2; i >= 0; i--) {
     header[i] = trash % 2;
@@ -46,7 +44,8 @@ int* create_header (int trash, int huff_tree) {
 
 int tree_size(node *tree, int size) {
   if (tree != NULL) {
-    if (tree->left == NULL && tree->right == NULL && (tree->item == '*' || tree->item == '\\')) {
+    if (tree->left == NULL && tree->right == NULL &&
+        (tree->item == '*' || tree->item == '\\')) {
       size++;
     }
     size++;
@@ -56,7 +55,7 @@ int tree_size(node *tree, int size) {
   return size;
 }
 
-int put_byte (hash_table *ht, FILE *file, FILE *compressed) {
+int put_byte(hash_table *ht, FILE *file, FILE *compressed) {
   int byte = fgetc(file);
   unsigned char c = 0;
   int pos_byte = 7, pos_way = 0;
@@ -84,7 +83,8 @@ int put_byte (hash_table *ht, FILE *file, FILE *compressed) {
 
 void write_pre_order(node *tree, FILE *file) {
   if (tree != NULL) {
-    if (tree->left == NULL && tree->right == NULL && (tree->item == '*' || tree->item == '\\')) {
+    if (tree->left == NULL && tree->right == NULL &&
+        (tree->item == '*' || tree->item == '\\')) {
       fputc('\\', file);
     }
     fputc(tree->item, file);
@@ -123,7 +123,7 @@ node *sort(node *head) {
   }
   return head;
 }
-  
+
 node *create_huffman_tree(node *head) {
   while (head->next != NULL) {
     node *new_node = (node *)malloc(sizeof(node));
@@ -146,14 +146,14 @@ node *create_huffman_tree(node *head) {
   return head;
 }
 
-void compress () {
+void compress() {
   int byte = 0;
   int frequency[ARRAY_SIZE] = {0};
   unsigned char way_tree[ARRAY_SIZE];
   char my_file[50];
 
-  puts ("Qual arquivo deseja comprimir?\nInsira: arquivo.extensao");
-  scanf ("%s", my_file);
+  puts("Qual arquivo deseja comprimir?\nInsira: arquivo.extensao");
+  scanf("%s", my_file);
   FILE *file = fopen(my_file, "r");
 
   if (file == NULL) {
@@ -161,14 +161,14 @@ void compress () {
     return;
   }
 
-  puts ("\nNao vai durar nem uma hora!\n.\n.\n.");
+  puts("\nNao vai durar nem uma hora!\n.\n.\n.");
 
   while (byte != EOF) {
     byte = fgetc(file);
     frequency[byte]++;
   }
 
-  FILE *compressed = fopen("compressed_file.huff", "w+");
+  FILE *compressed = fopen("compressed.huff", "w+");
   priority_queue *pq = create_priority_queue();
   hash_table *ht = create_hash_table();
 
@@ -184,21 +184,21 @@ void compress () {
 
   rewind(file);
 
-  fputc (0, compressed);
-  fputc (0, compressed);
+  fputc(0, compressed);
+  fputc(0, compressed);
 
   write_pre_order(pq->head, compressed);
 
-  int trash = put_byte (ht, file, compressed);
-  int huff_tree = tree_size (pq->head, 0);
-  int *header = create_header (trash, huff_tree);
+  int trash = put_byte(ht, file, compressed);
+  int huff_tree = tree_size(pq->head, 0);
+  int *header = create_header(trash, huff_tree);
 
-  rewind (compressed);
+  rewind(compressed);
 
-  put_header (header, compressed);
+  put_header(header, compressed);
 
-  fclose (file);
-  fclose (compressed);
+  fclose(file);
+  fclose(compressed);
 
-  puts ("Concluido!\n");
+  puts("Concluido!\n");
 }
