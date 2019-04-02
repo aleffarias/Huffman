@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// ********************* PRIORITY QUEUE ***************
+// ************************** PRIORITY QUEUE **************************
 typedef struct _node {
   unsigned char item;
   int priority;
@@ -42,6 +42,19 @@ void enqueue(priority_queue *pq, char i, int p) {
     current->next = new_node;
   }
 }
+
+node *dequeue(priority_queue *pq) {
+  if (is_empty_pq(pq)) {
+    printf("Priority Queue underflow");
+    return NULL;
+  } else {
+    node *node = pq->head;
+    pq->head = pq->head->next;
+    node->next = NULL;
+    return node;
+  }
+}
+
 // ************************************************************************
 
 int init_suite(void) { return 0; }
@@ -51,22 +64,24 @@ int clear_suite(void) { return 0; }
 void test_enqueue() {
   priority_queue *test = create_priority_queue();
 
-  unsigned char item1 = 'E';
-  unsigned char item2 = 'D';
-  unsigned char item3 = 'C';
-  unsigned char item4 = 'B';
-  unsigned char item5 = 'A';
+  int item1 = 5;
+  int item2 = 4;
+  int item3 = 3;
+  int item4 = 2;
+  int item5 = 1;
 
   enqueue(test, item3, 3);
   enqueue(test, item1, 5);
   enqueue(test, item4, 2);
+  CU_ASSERT_EQUAL(dequeue(test), item3);
+
   enqueue(test, item5, 1);
   enqueue(test, item2, 4);
 
-  CU_ASSERT(!is_empty_pq(test));
   CU_ASSERT(test->head->left == NULL);
   CU_ASSERT(test->head->right == NULL);
 }
+// void testEmpty(void) { CU_ASSERT(!is_empty_pq(test)); }
 
 int main() {
   CU_pSuite pSuite = NULL;
@@ -84,12 +99,13 @@ int main() {
   }
 
   /* add the tests to the suite */
-  if (NULL == CU_add_test(pSuite, "test_enqueue", test_enqueue)) {
+  if (NULL == CU_add_test(pSuite, "test enqueue", test_enqueue)) {
     CU_cleanup_registry();
     return CU_get_error();
   }
 
   /* Run all tests using the CUnit Basic interface */
+  CU_basic_set_mode(CU_BRM_VERBOSE);
   CU_basic_run_tests();
   CU_cleanup_registry();
   return CU_get_error();
