@@ -1,3 +1,5 @@
+library(ggplot2)
+
 plot <- read.table("plot.txt", header = TRUE) 
 
 p -> ggplot(tree) + geom_point(aes(x = numero, y = custo_lista), color = "blue") + 
