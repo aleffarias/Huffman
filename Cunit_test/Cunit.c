@@ -70,10 +70,12 @@ void test_enqueue() {
   int item4 = 2;
   int item5 = 1;
 
-  enqueue(test, item3, 3);
-  enqueue(test, item1, 5);
-  enqueue(test, item4, 2);
-  CU_ASSERT_EQUAL(dequeue(test), item3);
+  enqueue(test, item3, 10);
+  enqueue(test, item1, 15);
+  enqueue(test, item4, 5);
+  dequeue(test);
+
+  CU_ASSERT_EQUAL(test->head->item, item3);
 
   enqueue(test, item5, 1);
   enqueue(test, item2, 4);
@@ -81,7 +83,6 @@ void test_enqueue() {
   CU_ASSERT(test->head->left == NULL);
   CU_ASSERT(test->head->right == NULL);
 }
-// void testEmpty(void) { CU_ASSERT(!is_empty_pq(test)); }
 
 int main() {
   CU_pSuite pSuite = NULL;
