@@ -5,6 +5,30 @@
 #include "linked_list.h"
 #include "binary_search_tree.h"
 
+void swap (int *a, int *b) {
+  int aux = *a;
+  *a = *b;
+  *b = aux;
+}
+
+void quick_sort (int *v, int size) {
+  if (size <= 1) {
+    return;
+  } else {
+    int aux, pivot = v[size/2], a = 0, b = size - 1;
+    while (a < b) {
+      while (v[a] < pivot) a++;
+      while (v[b] > pivot) b--;
+      if (a < b) {
+        swap (&v[a], &v[b]);
+        if (v[a] == v[b]) a++;
+      }
+    }
+    quick_sort (v, b);
+    quick_sort (v+a, size-a);
+  }
+}
+
 int main () {
   int i, lim, chosen, cost_list, cost_tree;
   
@@ -20,7 +44,7 @@ int main () {
 
   srand(time(NULL));
 
-  int numbers[lim+1];
+  int numbers[lim+1], sort_list[lim], sort_tree[lim];
   
   for (i = 0; i <= lim+1; i++) {
     numbers[i] = 0;
@@ -43,7 +67,15 @@ int main () {
   for(i = 0; i < lim; i++) { 
     cost_list = search_list(list, i);
     cost_tree = search_tree(bt, i);
-    fprintf(output, "%d\t%d\t%d\n", i, cost_list, cost_tree);
+    sort_list[i] = cost_list;
+    sort_tree[i] = cost_tree;
+  }
+
+  quick_sort (sort_list, lim);
+  quick_sort (sort_tree, lim);
+
+  for(i = 0; i < lim; i++) { 
+    fprintf(output, "%d\t%d\t%d\n", i+1, sort_list[i], sort_tree[i]);  
   }
 
   fclose(output);
