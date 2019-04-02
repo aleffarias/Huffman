@@ -54,6 +54,9 @@ dkms.conf
 # Eclipse
 *.project
 
+# Huffman
+*.huff
+
 #Apresentacao
 *.pptx
 *.pdf
