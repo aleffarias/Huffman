@@ -59,7 +59,6 @@ dkms.conf
 
 #Apresentacao
 *.pptx
-*.pdf
 *.docx
 *.doc
 *.png
